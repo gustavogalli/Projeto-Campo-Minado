@@ -1,6 +1,7 @@
 package br.com.cod3r.cm.modelo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -39,13 +40,13 @@ public class Tabuleiro {
 	}
 	
 	private void sortearMinas() {
-		long minasDistribuidas = 0;
+		long minasArmadas = 0;
 		Predicate<Campo> minado = c -> c.isMinado();
-		int aleatorio = (int) (Math.random() * campos.size());
-		campos.get(aleatorio).minar();
 		do {
-			minasDistribuidas = campos.stream().filter(minado).count();
-		} while(minasDistribuidas < minas);
+			minasArmadas = campos.stream().filter(minado).count();
+			int aleatorio = (int) (Math.random() * campos.size());
+			campos.get(aleatorio).minar();
+		} while(minasArmadas < minas);
 	}
 	
 	public boolean objetivoAlcancado() {
@@ -58,6 +59,19 @@ public class Tabuleiro {
 	}
 	
 	public String toString() {
+		StringBuilder sb = new StringBuilder();
 		
+		int i = 0;
+		for (int l = 0; l < linhas; l++) {
+			for (int c = 0; c < colunas; c++) {
+				sb.append(" ");
+				sb.append(campos.get(i));
+				sb.append(" ");
+				i++;
+			}
+			sb.append("\n");
+		}
+		
+		return sb.toString();
 	}
 }
