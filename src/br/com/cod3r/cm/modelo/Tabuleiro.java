@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
+import br.com.cod3r.cm.excecao.ExplosaoException;
+
 public class Tabuleiro {
 	
 	private int linhas;
@@ -24,10 +26,15 @@ public class Tabuleiro {
 	}
 	
 	public void abrirCampo(int linha, int coluna) {
-		campos.stream()
+		try {
+			campos.stream()
 			.filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
 			.findFirst()
 			.ifPresent(c -> c.abrir());
+		} catch(ExplosaoException e) {
+			campos.forEach(c -> c.setAberto(true));
+			throw e;
+		}
 	}
 	
 	public void marcarCampo(int linha, int coluna) {
