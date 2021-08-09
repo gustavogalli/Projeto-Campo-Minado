@@ -85,7 +85,45 @@ public class Campo {
 	public boolean isFechado() {
 		return !this.aberto;
 	}
+
+	public int getLinha() {
+		return linha;
+	}
+
+	public int getColuna() {
+		return coluna;
+	}
 	
+	// dois objetivos no jogo: 1-clicar e não estar minado e 2-marcar um campo com certeza de bomba
+	boolean objetivoAlcancado() {
+		boolean desvendado = !minado && aberto;
+		boolean protegido = !minado && marcado;
+		return desvendado || protegido;
+	}
 	
+	// saber a quantidade de minas na vizinhança
+	long minasNaVizinhanca() {
+		return vizinhos.stream().filter(v -> v.minado).count(); 
+	}
 	
+	void reiniciar() {
+		this.aberto = false;
+		this.minado = false;
+		this.marcado = false;
+	}
+	
+	public String toString() {
+		if(marcado) {
+			return "x";
+		} else if(aberto && minado) {
+			return "*";
+		} else if(aberto && minasNaVizinhanca() > 0) {
+			//mostrar a quantidade de minas na vizinhança
+			return Long.toString(minasNaVizinhanca());
+		} else if(aberto) {
+			return " ";
+		} else {
+			return "?";
+		}
+	}
 }
